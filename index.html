@@ -3,198 +3,90 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mapa interactivo por gustos — Gratis</title>
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
+  <title>Inicio — Mundo Interactivo</title>
+  <link rel="preconnect" href="https://unpkg.com"/>
   <style>
-    :root{
-      --bg:#0f172a; --panel:#111827; --text:#e5e7eb; --muted:#94a3b8; --accent:#22c55e; --chip:#1f2937;
-    }
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .wrap{display:grid;grid-template-columns:360px 1fr;grid-template-rows:auto 1fr;min-height:100%}
-    header{grid-column:1/-1;padding:14px 18px;border-bottom:1px solid #1f2937;display:flex;gap:12px;align-items:center}
-    header h1{font-size:18px;margin:0}
-    .badge{background:var(--chip);padding:4px 8px;border-radius:999px;color:var(--muted);font-size:12px}
-    .panel{padding:16px;border-right:1px solid #1f2937}
-    .panel h2{margin:0 0 8px 0;font-size:16px}
-    .group{margin-bottom:12px}
-    label{display:block;margin:6px 0;color:var(--muted);font-size:14px}
-    .chips{display:flex;flex-wrap:wrap;gap:6px}
-    .chip{background:var(--chip);padding:6px 10px;border-radius:999px;font-size:13px;cursor:pointer;user-select:none}
-    .chip input{display:none}
-    .chip.active{outline:2px solid var(--accent)}
-    button{background:var(--accent);border:0;color:#052e16;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
-    button.secondary{background:#334155;color:#e5e7eb}
-    #map{height:calc(100vh - 64px)}
-    .legend{position:absolute;bottom:12px;left:12px;background:#111827d9;color:#e5e7eb;padding:8px 10px;border-radius:8px;font-size:12px}
-    .place-card{font-size:12px;line-height:1.35}
-    .place-card h3{margin:0 0 6px 0;font-size:14px}
-    .place-card .tags{display:flex;gap:4px;flex-wrap:wrap}
-    .tag{background:#eef2ff;color:#312e81;border-radius:999px;padding:2px 6px;font-size:11px}
-    .credit{color:#94a3b8;font-size:12px;margin-left:auto}
-    .tip{font-size:12px;color:var(--muted)}
-    @media (max-width: 900px){.wrap{grid-template-columns:1fr;grid-template-rows:auto auto 1fr}.panel{border-right:0;border-bottom:1px solid #1f2937}}
+    :root{--bg:#0b1020;--fg:#e5e7eb;--muted:#94a3b8;--accent:#22c55e}
+    html,body{height:100%;margin:0;background:radial-gradient(80% 80% at 50% 20%,#101a39,#070a14 60%, #03050a);color:var(--fg);font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{position:relative;height:100%;overflow:hidden}
+    #globe{position:absolute;inset:0}
+    header{position:absolute;top:18px;left:18px;right:18px;display:flex;gap:12px;align-items:center;z-index:10}
+    .logo{display:inline-flex;gap:10px;align-items:center}
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--accent);box-shadow:0 0 16px #22c55e}
+    h1{font-size:18px;margin:0}
+    .cta{position:absolute;left:50%;bottom:48px;transform:translateX(-50%);display:flex;flex-direction:column;gap:10px;align-items:center;z-index:10}
+    .btn{background:var(--accent);color:#062a13;padding:12px 18px;border:0;border-radius:12px;font-weight:700;cursor:pointer}
+    .btn.secondary{background:#1f2937;color:#e5e7eb}
+    .sub{color:var(--muted);font-size:14px}
+    .credit{position:absolute;right:14px;bottom:12px;color:#64748b;font-size:12px;z-index:10}
+    .hint{position:absolute;top:60px;left:18px;color:#a3aed0;font-size:12px;opacity:.85}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <h1>Mapa por gustos</h1>
-      <span class="badge">Leaflet + OpenStreetMap</span>
-      <span class="credit">100% gratis para empezar</span>
+      <div class="logo"><span class="dot"></span><h1>Mundo Interactivo</h1></div>
     </header>
+    <div class="hint">Arrastra para girar · rueda para acercar</div>
+    <div id="globe"></div>
 
-    <aside class="panel">
-      <h2>Elige tus gustos</h2>
-      <div class="group">
-        <label>Intereses (elige varios):</label>
-        <div id="gustos" class="chips"></div>
-        <div class="tip">Se guardan en tu navegador (localStorage).</div>
-      </div>
-      <div class="group">
-        <label>Radio de búsqueda (km)</label>
-        <input id="radio" type="range" min="1" max="25" value="5" />
-        <div><span id="radioVal">5</span> km</div>
-      </div>
-      <div class="group">
-        <button id="btnFiltrar">Recomendar lugares</button>
-        <button id="btnTodos" class="secondary" style="margin-left:8px">Ver todo</button>
-      </div>
-      <div class="tip">Activa geolocalización del navegador para centrar el mapa cerca de ti.</div>
-    </aside>
+    <div class="cta">
+      <button class="btn" onclick="location.href='mapa.html'">Entrar al mapa por gustos</button>
+      <div class="sub">Página frontal con un mundo rotando en WebGL</div>
+      <button class="btn secondary" onclick="toggleAutoRotate()">Pausar/Continuar rotación</button>
+    </div>
 
-    <main id="map"></main>
+    <div class="credit">Datos base: Natural Earth · Render: Three.js / Globe.gl</div>
   </div>
 
-  <div class="legend">⬤ Comida · ⬤ Naturaleza · ⬤ Arte · ⬤ Café · ⬤ Historia</div>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Librería Globe.gl (usa Three.js) -->
+  <script src="https://unpkg.com/globe.gl"></script>
   <script>
-    // --- Datos de ejemplo (cámbialos por los tuyos) ---
-    const PLACES = [
-      { id: 1, nombre: "Tacos Don Pepe", lat: 19.4326, lng: -99.1332, tags: ["comida","café"], desc: "Tacos al pastor y café de olla." },
-      { id: 2, nombre: "Parque del Bosque", lat: 19.427, lng: -99.2, tags: ["naturaleza"], desc: "Rutas para correr y laguito." },
-      { id: 3, nombre: "Museo de Arte Contemp.", lat: 19.426, lng: -99.15, tags: ["arte","historia"], desc: "Exposiciones temporales." },
-      { id: 4, nombre: "Cafetería Aurora", lat: 19.44, lng: -99.18, tags: ["café","comida"], desc: "V60 y pan artesanal." },
-      { id: 5, nombre: "Zona Arqueológica", lat: 19.66, lng: -98.84, tags: ["historia","naturaleza"], desc: "Pirámides al amanecer." }
-    ];
+    // Crear el globo
+    const globeEl = document.getElementById('globe');
+    const globe = Globe()(globeEl)
+      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+      .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+      .backgroundColor('rgba(0,0,0,0)');
 
-    const GUSTOS = ["comida","naturaleza","arte","café","historia"];
-
-    // --- UI de gustos (chips con toggle) ---
-    const gustosWrap = document.getElementById('gustos');
-    const stored = JSON.parse(localStorage.getItem('gustos')||'[]');
-
-    GUSTOS.forEach(g => {
-      const el = document.createElement('label');
-      el.className = 'chip' + (stored.includes(g) ? ' active' : '');
-      el.innerHTML = `<input type="checkbox" ${stored.includes(g)?'checked':''} value="${g}"># ${g}`;
-      el.onclick = (e)=>{
-        if(e.target.tagName.toLowerCase()==='input') return; // evitar doble toggle
-        const input = el.querySelector('input');
-        input.checked = !input.checked;
-        el.classList.toggle('active', input.checked);
-        saveGustos();
-      };
-      el.querySelector('input').addEventListener('change', () => {
-        el.classList.toggle('active', el.querySelector('input').checked);
-        saveGustos();
-      });
-      gustosWrap.appendChild(el);
-    });
-
-    function getGustosSel(){
-      return [...document.querySelectorAll('#gustos input:checked')].map(i=>i.value);
+    // Tamaño responsivo
+    function fit(){
+      globe.width([window.innerWidth]).height([window.innerHeight]);
     }
-    function saveGustos(){
-      localStorage.setItem('gustos', JSON.stringify(getGustosSel()));
-    }
+    window.addEventListener('resize', fit); fit();
 
-    // --- Mapa ---
-    const map = L.map('map');
-    const osm = L.tileLayer(
-      // Para prototipos puedes usar OSM estándar, pero para producción usa tu propio servidor/clave.
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      { attribution: '&copy; OpenStreetMap contributors' }
-    ).addTo(map);
+    // Iluminación y atmósfera sutil
+    const three = globe._three; // acceso al renderer/scene/camera
+    three.scene.fog = null;
+    globe.atmosphereColor('#6ee7b7');
+    globe.atmosphereAltitude(0.18);
 
-    // Centrado inicial (CDMX). Luego intentamos geolocalizar.
-    map.setView([19.4326, -99.1332], 12);
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos)=>{
-        const {latitude, longitude} = pos.coords;
-        map.setView([latitude, longitude], 13);
-        L.circle([latitude, longitude], {radius: 30, color:'#22c55e'}).addTo(map).bindPopup('Estás aquí');
-      }, ()=>{}, {enableHighAccuracy:true, timeout:5000});
-    }
-
-    // Marcadores
-    const markers = [];
-    function iconByTag(tags){
-      // Sencillo: colores diferentes por categorías principales
-      const main = (tags.find(t=>["comida","naturaleza","arte","café","historia"].includes(t))||'comida');
-      const colors = {comida:'#ef4444', naturaleza:'#22c55e', arte:'#a855f7', 'café':'#f59e0b', historia:'#3b82f6'};
-      const color = colors[main]||'#ef4444';
-      const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='24' height='36' viewBox='0 0 24 36'>\n  <path d='M12 0C5.4 0 0 5.2 0 11.6 0 20.3 12 36 12 36s12-15.7 12-24.4C24 5.2 18.6 0 12 0z' fill='${color}'/>\n  <circle cx='12' cy='12' r='5' fill='white'/>\n</svg>`);
-      return L.icon({iconUrl:`data:image/svg+xml,${svg}`, iconSize:[24,36], iconAnchor:[12,36], popupAnchor:[0,-30]});
-    }
-
-    function renderMarkers(list){
-      markers.forEach(m=>map.removeLayer(m));
-      markers.length = 0;
-      list.forEach(p=>{
-        const m = L.marker([p.lat, p.lng], {icon: iconByTag(p.tags)}).addTo(map);
-        m.bindPopup(`<div class='place-card'><h3>${p.nombre}</h3><div>${p.desc||''}</div><div class='tags'>${p.tags.map(t=>`<span class='tag'>${t}</span>`).join(' ')}</div></div>`);
-        markers.push(m);
-      });
-    }
-
-    renderMarkers(PLACES);
-
-    // Filtro por gustos + radio desde centro del mapa (o ubicación si disponible)
-    const radioInput = document.getElementById('radio');
-    const radioVal = document.getElementById('radioVal');
-    radioInput.addEventListener('input', ()=> radioVal.textContent = radioInput.value);
-
-    function filtrar(){
-      const gustosSel = getGustosSel();
-      const km = Number(radioInput.value);
-      const center = map.getCenter();
-      const fil = PLACES.filter(p => {
-        const matchTag = gustosSel.length===0 || p.tags.some(t=>gustosSel.includes(t));
-        const d = haversine(center.lat, center.lng, p.lat, p.lng);
-        return matchTag && d <= km;
-      });
-      renderMarkers(fil);
-      if (fil.length) {
-        const g = L.featureGroup(markers);
-        map.fitBounds(g.getBounds().pad(0.2));
+    // Rotación automática
+    let auto = true; let last = Date.now();
+    (function animate(){
+      requestAnimationFrame(animate);
+      if(auto){
+        const now = Date.now();
+        const dt = (now - last)/1000; last = now;
+        globe.controls().autoRotate = true;
+        globe.controls().autoRotateSpeed = 0.6; // más bajo = más lento
+      } else {
+        globe.controls().autoRotate = false;
       }
-    }
+    })();
+    function toggleAutoRotate(){ auto = !auto; }
 
-    function verTodo(){
-      renderMarkers(PLACES);
-      const g = L.featureGroup(markers);
-      map.fitBounds(g.getBounds().pad(0.2));
-    }
-
-    document.getElementById('btnFiltrar').onclick = filtrar;
-    document.getElementById('btnTodos').onclick = verTodo;
-
-    // Haversine en km
-    function haversine(lat1, lon1, lat2, lon2){
-      const R = 6371; // km
-      const dLat = (lat2-lat1) * Math.PI/180;
-      const dLon = (lon2-lon1) * Math.PI/180;
-      const a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
-      const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R*c;
-    }
+    // Opcional: puntos de ejemplo (ciudades) para mostrar que funciona
+    const puntos = [
+      {lat:19.4326, lng:-99.1332, size:0.6, color:'#22c55e'}, // CDMX
+      {lat:40.7128, lng:-74.0060, size:0.6, color:'#38bdf8'}, // NYC
+      {lat:48.8566, lng:2.3522, size:0.6, color:'#f472b6'}     // París
+    ];
+    globe
+      .pointsData(puntos)
+      .pointAltitude('size')
+      .pointColor('color')
+      .pointRadius(0.6);
   </script>
 </body>
 </html>
