@@ -1,1 +1,7 @@
-[]
+[
+  {"id":1,"nombre":"Tacos Don Pepe","lat":19.4326,"lng":-99.1332,"tags":["comida","café"],"desc":"Tacos al pastor y café de olla."},
+  {"id":2,"nombre":"Parque del Bosque","lat":19.427,"lng":-99.2,"tags":["naturaleza"],"desc":"Rutas para correr y laguito."},
+  {"id":3,"nombre":"Museo Contemporáneo","lat":19.426,"lng":-99.15,"tags":["arte","historia"],"desc":"Exposiciones temporales."},
+  {"id":4,"nombre":"Cafetería Aurora","lat":19.44,"lng":-99.18,"tags":["café","comida"],"desc":"V60 y pan artesanal."},
+  {"id":5,"nombre":"Zona Arqueológica","lat":19.66,"lng":-98.84,"tags":["historia","naturaleza"],"desc":"Pirámides al amanecer."}
+]
