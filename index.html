@@ -63,17 +63,24 @@
 
     // Rotación automática
     let auto = true; let last = Date.now();
+    let auto = true;
+    let last = Date.now();
     (function animate(){
-      requestAnimationFrame(animate);
-      if(auto){
-        const now = Date.now();
-        const dt = (now - last)/1000; last = now;
-        globe.controls().autoRotate = true;
-        globe.controls().autoRotateSpeed = 0.6; // más bajo = más lento
-      } else {
-        globe.controls().autoRotate = false;
-      }
-    })();
+    requestAnimationFrame(animate);
+    const now = Date.now();
+    const dt = (now - last) / 1000;
+    last = now;
+
+    if (auto) {
+    // Rotar el globo lentamente en su eje Y (de oeste a este)
+    const rotSpeed = 0.02; // ajusta: más alto = más rápido (0.02 = suave)
+    globe.rotation.y += rotSpeed * dt;
+  }
+})();
+function toggleAutoRotate() {
+  auto = !auto;
+}
+
     function toggleAutoRotate(){ auto = !auto; }
 
     // Opcional: puntos de ejemplo (ciudades) para mostrar que funciona
