@@ -63,7 +63,6 @@
 
     // Rotación automática
     let auto = true; let last = Date.now();
-    let auto = true;
     let last = Date.now();
     (function animate(){
     requestAnimationFrame(animate);
@@ -75,8 +74,7 @@
     // Rotar el globo lentamente en su eje Y (de oeste a este)
     const rotSpeed = 0.02; // ajusta: más alto = más rápido (0.02 = suave)
     globe.rotation.y += rotSpeed * dt;
-  }
-})();
+    }
 function toggleAutoRotate() {
   auto = !auto;
 }
