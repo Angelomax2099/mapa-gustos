@@ -48,6 +48,7 @@
       .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
       .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
       .backgroundColor('rgba(0,0,0,0)');
+    globe.controls().autoRotate = false;
 
     // Tamaño responsivo
     function fit(){
@@ -61,25 +62,26 @@
     globe.atmosphereColor('#6ee7b7');
     globe.atmosphereAltitude(0.18);
 
-  // Rotación automática
-let auto = true;
-let last = Date.now();
+    // Rotación automática
+    let auto = true;
+    let last = Date.now();
 
-setTimeout(() => {
-  (function animate(){
-    requestAnimationFrame(animate);
-    const now = Date.now();
-    const dt = (now - last) / 1000;
-    last = now;
+    setTimeout(() => {
+      (function animate(){
+        requestAnimationFrame(animate);
+        const now = Date.now();
+        const dt = (now - last) / 1000;
+        last = now;
 
-    if (auto) {
-      const rotSpeed = 0.02; // más alto = más rápido (0.02 = suave)
-      globe._three.scene.rotation.y += rotSpeed * dt; // 👈 rotación realista
-    }
-  })();
-}, 500); // espera 0.5 s para que Globe.gl inicialice correctamente
+        // asegurarse de que Globe.gl esté listo
+        if (auto && globe._three && globe._three.scene) {
+          const rotSpeed = 0.02; // más alto = más rápido (0.02 = suave)
+          globe._three.scene.rotation.y += rotSpeed * dt; // rotación realista (oeste → este)
+        }
+      })();
+    }, 500); // espera medio segundo para que se inicialice
 
-function toggleAutoRotate(){ auto = !auto; }
+    function toggleAutoRotate(){ auto = !auto; }
 
     const puntos = [
       {lat:19.4326, lng:-99.1332, size:0.6, color:'#22c55e'}, // CDMX
