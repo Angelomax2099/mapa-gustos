@@ -54,13 +54,13 @@
       globe.width([window.innerWidth]).height([window.innerHeight]);
     }
     window.addEventListener('resize', fit); fit();
-
+/*
     // Iluminación y atmósfera sutil
     const three = globe._three; // acceso al renderer/scene/camera
     three.scene.fog = null;
     globe.atmosphereColor('#6ee7b7');
     globe.atmosphereAltitude(0.18);
-
+*/
     // Rotación automática
     let auto = true;
     let last = Date.now();
@@ -79,7 +79,7 @@ function toggleAutoRotate() {
   auto = !auto;
 }
 
-    function toggleAutoRotate(){ auto = !auto; }
+  //  function toggleAutoRotate(){ auto = !auto; }
 
     // Opcional: puntos de ejemplo (ciudades) para mostrar que funciona
     const puntos = [
