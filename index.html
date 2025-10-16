@@ -54,34 +54,33 @@
       globe.width([window.innerWidth]).height([window.innerHeight]);
     }
     window.addEventListener('resize', fit); fit();
-/*
+
     // Iluminación y atmósfera sutil
     const three = globe._three; // acceso al renderer/scene/camera
     three.scene.fog = null;
     globe.atmosphereColor('#6ee7b7');
     globe.atmosphereAltitude(0.18);
-*/
-    // Rotación automática
-    let auto = true;
-    let last = Date.now();
-    (function animate(){
+
+  // Rotación automática
+let auto = true;
+let last = Date.now();
+
+setTimeout(() => {
+  (function animate(){
     requestAnimationFrame(animate);
     const now = Date.now();
     const dt = (now - last) / 1000;
+    last = now;
 
     if (auto) {
-    // Rotar el globo lentamente en su eje Y (de oeste a este)
-    const rotSpeed = 0.02; // ajusta: más alto = más rápido (0.02 = suave)
-    globe.rotation.y += rotSpeed * dt;
+      const rotSpeed = 0.02; // más alto = más rápido (0.02 = suave)
+      globe._three.scene.rotation.y += rotSpeed * dt; // 👈 rotación realista
     }
-})();
-function toggleAutoRotate() {
-  auto = !auto;
-}
+  })();
+}, 500); // espera 0.5 s para que Globe.gl inicialice correctamente
 
-  //  function toggleAutoRotate(){ auto = !auto; }
+function toggleAutoRotate(){ auto = !auto; }
 
-    // Opcional: puntos de ejemplo (ciudades) para mostrar que funciona
     const puntos = [
       {lat:19.4326, lng:-99.1332, size:0.6, color:'#22c55e'}, // CDMX
       {lat:40.7128, lng:-74.0060, size:0.6, color:'#38bdf8'}, // NYC
