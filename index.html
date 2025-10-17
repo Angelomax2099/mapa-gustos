@@ -1,98 +1,58 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Inicio — Mundo Interactivo</title>
-  <link rel="preconnect" href="https://unpkg.com"/>
-  <style>
-    :root{--bg:#0b1020;--fg:#e5e7eb;--muted:#94a3b8;--accent:#22c55e}
-    html,body{height:100%;margin:0;background:radial-gradient(80% 80% at 50% 20%,#101a39,#070a14 60%, #03050a);color:var(--fg);font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial}
-    .wrap{position:relative;height:100%;overflow:hidden}
-    #globe{position:absolute;inset:0}
-    header{position:absolute;top:18px;left:18px;right:18px;display:flex;gap:12px;align-items:center;z-index:10}
-    .logo{display:inline-flex;gap:10px;align-items:center}
-    .dot{width:10px;height:10px;border-radius:999px;background:var(--accent);box-shadow:0 0 16px #22c55e}
-    h1{font-size:18px;margin:0}
-    .cta{position:absolute;left:50%;bottom:48px;transform:translateX(-50%);display:flex;flex-direction:column;gap:10px;align-items:center;z-index:10}
-    .btn{background:var(--accent);color:#062a13;padding:12px 18px;border:0;border-radius:12px;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#1f2937;color:#e5e7eb}
-    .sub{color:var(--muted);font-size:14px}
-    .credit{position:absolute;right:14px;bottom:12px;color:#64748b;font-size:12px;z-index:10}
-    .hint{position:absolute;top:60px;left:18px;color:#a3aed0;font-size:12px;opacity:.85}
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <div class="logo"><span class="dot"></span><h1>Mundo Interactivo</h1></div>
-    </header>
-    <div class="hint">Arrastra para girar · rueda para acercar</div>
-    <div id="globe"></div>
+<!-- Librería Globe.gl (usa Three.js) -->
+<script src="https://unpkg.com/globe.gl"></script>
+<script>
+  // Crear el globo
+  const globeEl = document.getElementById('globe');
+  const globe = Globe()(globeEl)
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+    .backgroundColor('rgba(0,0,0,0)');
 
-    <div class="cta">
-      <button class="btn" onclick="location.href='mapa.html'">Entrar al mapa por gustos</button>
-      <div class="sub">Página frontal con un mundo rotando en WebGL</div>
-      <button class="btn secondary" onclick="toggleAutoRotate()">Pausar/Continuar rotación</button>
-    </div>
+  // Controles: sin autorotate nativo, porque lo haremos manual
+  globe.controls().autoRotate = false;
 
-    <div class="credit">Datos base: Natural Earth · Render: Three.js / Globe.gl</div>
-  </div>
+  // Tamaño responsivo
+  function fit(){
+    globe.width(window.innerWidth).height(window.innerHeight);
+  }
+  window.addEventListener('resize', fit);
+  fit();
 
-  <!-- Librería Globe.gl (usa Three.js) -->
-  <script src="https://unpkg.com/globe.gl"></script>
-  <script>
-    // Crear el globo
-    const globeEl = document.getElementById('globe');
-    const globe = Globe()(globeEl)
-      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
-      .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-      .backgroundColor('rgba(0,0,0,0)');
-    globe.controls().autoRotate = false;
+  // Iluminación y atmósfera sutil (API pública)
+  globe.scene().fog = null;
+  globe.atmosphereColor('#6ee7b7');
+  globe.atmosphereAltitude(0.18);
 
-    // Tamaño responsivo
-    function fit(){
-      globe.width([window.innerWidth]).height([window.innerHeight]);
+  // Rotación automática manual
+  let auto = true;
+  let last = Date.now();
+
+  function animate(){
+    requestAnimationFrame(animate);
+    const now = Date.now();
+    const dt = (now - last) / 1000;
+    last = now;
+
+    if (auto) {
+      const rotSpeed = 0.02; // rad/s aprox
+      globe.rotation.y += rotSpeed * dt; // rota el objeto del globo (oeste → este)
     }
-    window.addEventListener('resize', fit); fit();
+  }
+  animate();
 
-    // Iluminación y atmósfera sutil
-    const three = globe._three; // acceso al renderer/scene/camera
-    three.scene.fog = null;
-    globe.atmosphereColor('#6ee7b7');
-    globe.atmosphereAltitude(0.18);
+  // Botón de pausa/continuar
+  function toggleAutoRotate(){ auto = !auto; }
+  window.toggleAutoRotate = toggleAutoRotate; // por si acaso
 
-    // Rotación automática
-    let auto = true;
-    let last = Date.now();
-
-    setTimeout(() => {
-      (function animate(){
-        requestAnimationFrame(animate);
-        const now = Date.now();
-        const dt = (now - last) / 1000;
-        last = now;
-
-        // asegurarse de que Globe.gl esté listo
-        if (auto && globe._three && globe._three.scene) {
-          const rotSpeed = 0.02; // más alto = más rápido (0.02 = suave)
-          globe._three.scene.rotation.y += rotSpeed * dt; // rotación realista (oeste → este)
-        }
-      })();
-    }, 500); // espera medio segundo para que se inicialice
-
-    function toggleAutoRotate(){ auto = !auto; }
-
-    const puntos = [
-      {lat:19.4326, lng:-99.1332, size:0.6, color:'#22c55e'}, // CDMX
-      {lat:40.7128, lng:-74.0060, size:0.6, color:'#38bdf8'}, // NYC
-      {lat:48.8566, lng:2.3522, size:0.6, color:'#f472b6'}     // París
-    ];
-    globe
-      .pointsData(puntos)
-      .pointAltitude('size')
-      .pointColor('color')
-      .pointRadius(0.6);
-  </script>
-</body>
-</html>
+  // Puntos de ejemplo
+  const puntos = [
+    {lat:19.4326, lng:-99.1332, size:0.6, color:'#22c55e'}, // CDMX
+    {lat:40.7128, lng:-74.0060, size:0.6, color:'#38bdf8'}, // NYC
+    {lat:48.8566, lng:2.3522,  size:0.6, color:'#f472b6'}   // París
+  ];
+  globe
+    .pointsData(puntos)
+    .pointAltitude('size')
+    .pointColor('color')
+    .pointRadius(0.6);
+</script>
